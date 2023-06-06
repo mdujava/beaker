@@ -48,6 +48,7 @@ BuildRequires:  python3-mock
 BuildRequires:  python3-devel
 BuildRequires:  python3-docutils
 BuildRequires:  python3-sphinx
+BuildRequires:  python3-sphinxcontrib-httpdomain
 
 
 %package common
