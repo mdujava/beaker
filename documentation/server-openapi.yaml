@@ -1,0 +1,24 @@
+openapi: 3.0.3
+info:
+  title: Beaker new-gen - Server
+  description: This spec showcases a proposal to new REST api for beaker-server.
+  version: "29.0-dev"
+servers:
+  - url: "https://beaker-server.example.com:443/api/openapi"
+    description: Server Url
+paths:
+  /healthz:
+    summary: API ping
+    description: Hit this enpoint to check connection to beaker server
+    head:
+      responses:
+        '200':
+          description: OK
+    get:
+      responses:
+        '200':
+          description: OK
+          content:
+            text/plain:
+              example: "We are healthy!"
+

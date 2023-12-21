@@ -1,0 +1,141 @@
+openapi: 3.0.3
+info:
+  title: Beaker new-gen - Lab Controller
+  description: This spec showcases a proposal to new REST api for beaker-LC.
+  version: "29.0-dev"
+servers:
+  - url: "http://lc-01.{geo}.example.com:8000/"
+    description: Lab Controller Url
+    variables:
+      geo:
+        enum:
+          - eu
+          - us
+        default: us
+paths:
+  /recipes/{recipe_id}/tasks/{task_id}/results/{result_id}/logs/:
+    parameters:
+      - in: path
+        name: recipe_id
+        schema:
+          type: integer
+        required: true
+        description: recipe ID
+      - in: path
+        name: task_id
+        schema:
+          type: integer
+        required: true
+        description: recipe ID
+      - in: path
+        name: result_id
+        schema:
+          type: integer
+        required: true
+        description: recipe ID
+    get:
+      summary: Get existing log names for specific taskrun
+      responses:
+        '200':
+          description: OK
+          content:
+            text/plain:
+              example: "/var/logs/messages\n/root/ks_original"
+        '404':
+          description: "is not a valid RecipeTaskResult"
+
+  /recipes/{recipe_id}/tasks/{task_id}/results/{result_id}/logs/{path}:
+    parameters:
+      - in: path
+        name: recipe_id
+        schema:
+          type: integer
+        required: true
+        description: recipe ID
+      - in: path
+        name: task_id
+        schema:
+          type: integer
+        required: true
+        description: recipe ID
+      - in: path
+        name: result_id
+        schema:
+          type: integer
+        required: true
+        description: recipe ID
+      - in: path
+        name: path
+        schema:
+          type: string
+        required: true
+        description: recipe ID
+    get:
+      summary: Get log of specific taskrun
+      responses:
+        '200':
+          description: OK
+          content:
+            text/plain:
+              example: "Log line no. 1\nLog line no. 2"
+    put:
+      summary: Upload log for specific taskrun
+      responses:
+        '204':
+          description: OK
+        '409':
+          description: Cannot register file for finished ...
+        '403':
+          description: Too many ...
+
+  /power/{fqdn}/:
+    put:
+      summary: Set power to SUT
+      description: Hit this enpoint to check connection to LC
+      parameters:
+        - in: path
+          name: fqdn
+          schema:
+            type: string
+          required: true
+          description: fqdn of system under test to set power to
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                action:
+                  type: string
+                  anyOf:
+                    - const: "on"
+                    - const: "off"
+                    - const: "reboot"
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                action:
+                  type: string
+                  anyOf:
+                    - const: "on"
+                    - const: "off"
+                    - const: "reboot"
+      responses:
+        '204':
+          description: OK
+
+  /healthz:
+    summary: API ping
+    description: Hit this enpoint to check connection to LC
+    head:
+      responses:
+        '200':
+          description: OK
+    get:
+      responses:
+        '200':
+          description: OK
+          content:
+            text/plain:
+              example: "We are healthy!"
