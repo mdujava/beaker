@@ -10,6 +10,7 @@ on:
   push:
     branches:
       - python-3
+      - next
   pull_request:
 
 jobs:
